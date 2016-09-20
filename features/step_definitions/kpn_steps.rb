@@ -1,5 +1,25 @@
-Given(/^User goes to kpn page$/) do
+Given(/^User goes to kpn page and book ticket$/) do
 $driver.get 'http://www.kpntravels.in'
+end
+
+Given(/^User in home page$/) do
+puts "user need to select from and to place"
+end
+
+Given(/^User in bus selecting page$/) do
+puts "user need to select which bus they wants to travel"
+end
+
+Given(/^User in booking summary page$/) do
+puts "user need to select seat and enter name,boarding and droping point"
+end
+
+Given(/^User in Confirm booking page$/) do
+puts "user need to enter booking details"
+end
+
+Given(/^User in payment page$/) do
+puts "user need enter payment details"
 end
 
 When(/^User select empty source and destination$/) do
@@ -31,11 +51,11 @@ When(/^User select destination Coimbatore$/) do
   $driver.find_element(:xpath, '//*[@id="WebContent_ddlTo"]/option[9]').click
 end
 
-When(/^User selecr date as (\d+)$/) do |arg1|
+When(/^User selecr date as october (\d+)$/) do |arg1|
   $driver.find_element(:xpath, '//*[@id="WebContent_txtTravelDate"]').click
-  $driver.find_element(:xpath, '//*[@id="ui-datepicker-div"]/div/div/select[1]').click
+  $driver.find_element(:xpath, '//*[@id="ui-datepicker-div"]/div/div/select[1]/option[2]').click
 
-  $driver.find_element(:xpath, '//*[@id="ui-datepicker-div"]/table/tbody/tr[5]/td[3]/a').click
+  $driver.find_element(:xpath, '//*[@id="ui-datepicker-div"]/table/tbody/tr[2]/td[4]/a').click
 end
 
 Then(/^User should see the list of bus$/) do
@@ -63,7 +83,7 @@ end
 # end
 
 When (/^User select seat and click continue$/) do
-  $driver.find_element(:xpath, '//*[@id="LS111"]').click
+  $driver.find_element(:xpath, '//*[@id="LS49"]').click
   $driver.find_element(:xpath, '//*[@id="WebContent_btnContinue"]').click
 end
 
@@ -82,7 +102,7 @@ When (/^User click continue$/) do
   $driver.find_element(:xpath, '//*[@id="WebContent_btnContinue"]').click
 end
 
-Then (/^User should see the error message as "([^"]*)"$/) do |arg1|
+Then (/^User should see the name error message as "([^"]*)"$/) do |arg1|
   $driver.find_element(:xpath, '//*[@id="WebContent_rfvddlFrom"]')
 end
 
@@ -134,11 +154,37 @@ When (/^User click pay now$/) do
   $driver.find_element(:xpath, '//*[@id="Paybutton"]').click
 end
 
-Then (/^User should see the error message$/) do
+Then (/^User should see the Enter your card details page$/) do 
+  $driver.find_element(:xpath, '/html/body/center/table[4]/tbody/tr[1]/td/table/tbody/tr/td[2]')
+end
+
+Then (/^User should see the error message as "([^"]*)"$/) do |arg1|
   $driver.find_element(:xpath, '//*[@id="paymentDetail"]/table/tbody/tr[1]/td/table/tbody/tr[2]/td[3]/font')
 end
 
 And (/^User enter card number as "([^"]*)"$/) do |arg1|
-  $driver.find_element(:xpath, '//*[@id="CardNumber"]').send_keys(arg1)
-  $driver.find_element(:xpath, '//*[@id="WebContent_dtgPG_rdoSelectPG_1"]').click
+  $driver.find_element(:xpath, '//*[@id="CardNumber"]').clear
+  $driver.find_element(:xpath, '//*[@id="CardNumber"]').send_keys(arg1) 
+  $driver.find_element(:xpath, '//*[@id="Paybutton"]').click
+end
+
+And (/^User enter Expiry Date as "([^"]*)" and "([^"]*)"$/) do |arg1,arg2|
+  $driver.find_element(:xpath, '//*[@id="CardMonth"]').send_keys(arg1) 
+  $driver.find_element(:xpath, '//*[@id="CardYear"]').send_keys(arg2) 
+  $driver.find_element(:xpath, '//*[@id="Paybutton"]').click
+end
+
+Then (/^User should see invalid date error$/) do
+  $driver.find_element(:xpath, '//*[@id="WebContent_rfvddlFrom"]')
+end
+
+When (/^User enter correct date as "([^"]*)" and "([^"]*)"$/) do |arg1,arg2|
+  $driver.find_element(:xpath, '//*[@id="CardMonth"]').clear 
+  $driver.find_element(:xpath, '//*[@id="CardYear"]').clear 
+  $driver.find_element(:xpath, '//*[@id="CardMonth"]').send_keys(arg1) 
+  $driver.find_element(:xpath, '//*[@id="CardYear"]').send_keys(arg2) 
+end
+
+Then (/^User enter wrong security code as "([^"]*)"$/) do |arg1|
+  $driver.find_element(:xpath, '//*[@id="Securecode"]').send_keys(arg1)
 end

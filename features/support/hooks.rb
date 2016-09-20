@@ -17,7 +17,11 @@ After do |scenario|
   # the #failed?, #passed? and #exception methods.
 
   if(scenario.failed?)
-    #Do something if scenario fails.
+    puts "scenario failed"
+    # filename = "error-#{@current_page.class}-#{Time.now}.png" 
+     filename = "#{Time.now.strftime('%I-%M-%S-%L-')}" + scenario.title.gsub(' ', '-') + '.png' 
+      $driver.save_screenshot(filename)
+    embed(filename, 'image/png')
   end
 end
 
